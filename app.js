@@ -13,7 +13,7 @@ var app = express();
 
 //Set up mongoose connection
 var mongoose=require("mongoose");
-var dev_db_url="mongodb://localhost/shortUrl";
+var dev_db_url="mongodb://cs2252:2252Chns@ds145780.mlab.com:45780/mydatabase";
 var mongoDB= dev_db_url;
 mongoose.connect(mongoDB,function(err){
 	if(err)
@@ -41,7 +41,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.post("/new",function(req,res){
 	
 	var urlToShorten=req.body.name;
-	console.log(urlToShorten);
 	// res.send("something");
 	var regex=/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?//=]*)?/gi;
 	if(regex.test(urlToShorten))
@@ -69,11 +68,11 @@ app.post("/new",function(req,res){
 });
 
 app.get('/:link(*)',function(req,res,next){
-		shortUrl.find({shorterUrl: req.params.link},'originalUrl',function(err,result){
+		shortUrl.findOne({shorterUrl: req.params.link},'originalUrl',function(err,result){
 			if(err)
 				res.send("data not found");
 			else
-				res.redirect("http://"+result[0].originalUrl);
+				res.redirect("http://"+result.originalUrl);
 			// res.send("sending response");
 		});	
 
